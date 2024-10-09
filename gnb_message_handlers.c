@@ -5,8 +5,6 @@
 #include "gnb_message_handlers.h"
 #include <stdbool.h>
 #define CONNECTED_UES 4
-#define ALLOCATED_PRBs 8
-#define TOTAL_PRBs CONNECTED_UES*8
 
 int gnb_id = 0;
 bool is_initialized = false;
@@ -14,6 +12,12 @@ typedef struct {
     int rnti;
     // bool prop_1;
     // float prop_2;
+    float ue_rsrp;
+    float ue_ber_up;
+    float ue_ber_down;
+    int ue_mcs_up;
+    int ue_mcs_down;
+    int cell_load;
 } ue_struct;
 ue_struct connected_ue_list[CONNECTED_UES];
 
@@ -257,8 +261,6 @@ UeListM* build_ue_list_message(){
     // insert n ues
     ue_list_m->connected_ues = CONNECTED_UES;
     ue_list_m->n_ue_info = CONNECTED_UES;
-    ue_list_m->allocated_prbs = ALLOCATED_PRBs;
-    ue_list_m->total_prbs = TOTAL_PRBs;
 
     // if no ues are connected then we can stop and just return the message
     if(CONNECTED_UES == 0){
@@ -285,17 +287,17 @@ UeListM* build_ue_list_message(){
         // ue_info_list[i]->has_meas_type_3 = 1;
         // ue_info_list[i]->meas_type_3 = rand();
         ue_info_list[i]->has_ue_rsrp = 1;
-        ue_info_list[i]->ue_rsrp = rand();
+        ue_info_list[i]->ue_rsrp = ((float)rand() / 100) * (-70.0 - (-120.0)) + (-120.0);
         ue_info_list[i]->has_ue_ber_up = 1;
-        ue_info_list[i]->ue_ber_up = rand();
+        ue_info_list[i]->ue_ber_up = ((float)(rand() % 100)) / 100.0;
         ue_info_list[i]->has_ue_ber_down = 1;
-        ue_info_list[i]->ue_ber_down = rand();
+        ue_info_list[i]->ue_ber_down = ((float)(rand() % 100)) / 100.0;
         ue_info_list[i]->has_ue_mcs_up = 1;
-        ue_info_list[i]->ue_mcs_up = rand();
+        ue_info_list[i]->ue_mcs_up = rand() % 28;
         ue_info_list[i]->has_ue_mcs_down = 1;
-        ue_info_list[i]->ue_mcs_down = rand();
+        ue_info_list[i]->ue_mcs_down = rand() % 28;
         ue_info_list[i]->has_cell_load = 1;
-        ue_info_list[i]->cell_load = ALLOCATED_PRBs/TOTAL_PRBs;
+        ue_info_list[i]->cell_load = rand() % 100;
 
         // properties
         // ue_info_list[i]->has_prop_1 = 1;
