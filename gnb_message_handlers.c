@@ -15,9 +15,9 @@ typedef struct {
     float ue_rsrp;
     float ue_ber_up;
     float ue_ber_down;
-    int ue_mcs_up;
-    int ue_mcs_down;
-    int cell_load;
+    float ue_mcs_up;
+    float ue_mcs_down;
+    float cell_load;
 } ue_struct;
 ue_struct connected_ue_list[CONNECTED_UES];
 
